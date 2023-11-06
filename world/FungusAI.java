@@ -53,4 +53,22 @@ public class FungusAI extends CreatureAI {
         child.setY(newy);
         spreadcount++;
     }
+
+    @Override
+    public void onEnter(int x, int y, Tile tile) {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'onEnter'");
+    }
+
+    @Override
+    public void onNotify(String message) {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'onNotify'");
+    }
+
+    @Override
+    public void attack(Creature another) {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'attack'");
+    }
 }

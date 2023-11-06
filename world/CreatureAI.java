@@ -23,7 +23,7 @@ import java.awt.Point;
  *
  * @author Aeranythe Echosong
  */
-class CreatureAI {
+abstract class CreatureAI {
 
     protected Creature creature;
 
@@ -32,14 +32,13 @@ class CreatureAI {
         this.creature.setAI(this);
     }
 
-    public void onEnter(int x, int y, Tile tile) {
-    }
+    public abstract void onEnter(int x, int y, Tile tile);
 
-    public void onUpdate() {
-    }
+    public abstract void onUpdate();
 
-    public void onNotify(String message) {
-    }
+    public abstract void attack(Creature another);
+
+    public abstract void onNotify(String message);
 
     public boolean canSee(int x, int y) {
         if ((creature.x() - x) * (creature.x() - x) + (creature.y() - y) * (creature.y() - y) > creature.visionRadius()

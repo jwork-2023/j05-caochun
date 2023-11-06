@@ -25,6 +25,13 @@ import java.awt.Color;
  */
 public class Creature {
 
+
+    /*Constant values for moving*/
+    public static final int MOVE_UP = 1;
+    public static final int MOVE_DOWN = 2;
+    public static final int MOVE_LEFT = 3;
+    public static final int MOVE_RIGHT = 4;
+
     private World world;
 
     private int x;
@@ -121,19 +128,10 @@ public class Creature {
         if (other == null) {
             ai.onEnter(x + mx, y + my, world.tile(x + mx, y + my));
         } else {
-            attack(other);
+            ai.attack(other);
         }
     }
 
-    public void attack(Creature other) {
-        int damage = Math.max(0, this.attackValue() - other.defenseValue());
-        damage = (int) (Math.random() * damage) + 1;
-
-        other.modifyHP(-damage);
-
-        this.notify("You attack the '%s' for %d damage.", other.glyph, damage);
-        other.notify("The '%s' attacks you for %d damage.", glyph, damage);
-    }
 
     public void update() {
         this.ai.onUpdate();

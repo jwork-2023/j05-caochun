@@ -32,6 +32,7 @@ public class PlayerAI extends CreatureAI {
         this.messages = messages;
     }
 
+    @Override
     public void onEnter(int x, int y, Tile tile) {
         if (tile.isGround()) {
             creature.setX(x);
@@ -41,7 +42,24 @@ public class PlayerAI extends CreatureAI {
         }
     }
 
+    @Override
     public void onNotify(String message) {
         this.messages.add(message);
+    }
+
+    @Override
+    public void onUpdate() {
+    }
+
+    @Override
+    public void attack(Creature another) {
+        int damage = Math.max(0, this.creature.attackValue() - another.defenseValue());
+        damage = (int) (Math.random() * damage) + 1;
+
+        another.modifyHP(-damage);
+
+        this.creature.notify("You attack the '%s' for %d damage.", another.glyph(), damage);
+        another.notify("The '%s' attacks you for %d damage.", this.creature.glyph(), damage);
+
     }
 }

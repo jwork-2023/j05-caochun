@@ -10,11 +10,6 @@ public class Snake {
     /*Holds the snake pieces.  Acts like a linked list*/
     ArrayList<SnakePiece> pieces;
 
-    /*Constant values for moving*/
-    public static final int MOVE_UP = 1;
-    public static final int MOVE_DOWN = 2;
-    public static final int MOVE_LEFT = 3;
-    public static final int MOVE_RIGHT = 4;
 
 
     /*Width of board*/
@@ -50,20 +45,20 @@ public class Snake {
         int yPrev = pieces.get(0).getY();
 
         //Changes the location of the very first
-        switch (direction){
-            case MOVE_UP:
-                pieces.get(0).setY(pieces.get(0).getY()-1);
-                break;
-            case MOVE_DOWN:
-                pieces.get(0).setY(pieces.get(0).getY()+1);
-                break;
-            case MOVE_LEFT:
-                pieces.get(0).setX(pieces.get(0).getX()-1);
-                break;
-            case MOVE_RIGHT:
-                pieces.get(0).setX(pieces.get(0).getX()+1);
-                break;
-        }
+        // switch (direction){
+        //     case MOVE_UP:
+        //         pieces.get(0).setY(pieces.get(0).getY()-1);
+        //         break;
+        //     case MOVE_DOWN:
+        //         pieces.get(0).setY(pieces.get(0).getY()+1);
+        //         break;
+        //     case MOVE_LEFT:
+        //         pieces.get(0).setX(pieces.get(0).getX()-1);
+        //         break;
+        //     case MOVE_RIGHT:
+        //         pieces.get(0).setX(pieces.get(0).getX()+1);
+        //         break;
+        // }
 
         //Updates subsequent locations by going through linked list
         if(pieces.size() > 1) {
