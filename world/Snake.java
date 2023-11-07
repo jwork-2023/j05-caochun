@@ -41,8 +41,8 @@ public class Snake {
     public boolean updatePosition(int direction){
 
         //Store the previous location of the first before changing it
-        int xPrev = pieces.get(0).getX();
-        int yPrev = pieces.get(0).getY();
+        int xPrev = pieces.get(0).x();
+        int yPrev = pieces.get(0).y();
 
         //Changes the location of the very first
         // switch (direction){
@@ -63,8 +63,8 @@ public class Snake {
         //Updates subsequent locations by going through linked list
         if(pieces.size() > 1) {
             for (int i = 1; i < pieces.size(); i++) {
-                int tempX = pieces.get(i).getX();
-                int tempY = pieces.get(i).getY();
+                int tempX = pieces.get(i).x();
+                int tempY = pieces.get(i).y();
                 pieces.get(i).setX(xPrev);
                 pieces.get(i).setY(yPrev);
                 xPrev = tempX;
@@ -82,19 +82,19 @@ public class Snake {
 
 
         //Handle go too far to the left
-        if(pieces.get(0).getX() < 0){
+        if(pieces.get(0).x() < 0){
             return false;
         }
         //Handle go to far right
-        if(pieces.get(0).getX() > width-1){
+        if(pieces.get(0).x() > width-1){
             return false;
         }
         //Handle go to far down
-        if(pieces.get(0).getY() < 0){
+        if(pieces.get(0).y() < 0){
             return false;
         }
         //Handle go to far up
-        if(pieces.get(0).getY() > height-1){
+        if(pieces.get(0).y() > height-1){
             return false;
         }
 
@@ -111,8 +111,8 @@ public class Snake {
      */
     public boolean grow(){
         //Get last element in list
-        int x = pieces.get(pieces.size()-1).getX();
-        int y = pieces.get(pieces.size()-1).getY();
+        int x = pieces.get(pieces.size()-1).x();
+        int y = pieces.get(pieces.size()-1).y();
 
         //Create new snake pieces and place them in a space that is not taken.
         SnakePiece piece = new SnakePiece(x-1, y);

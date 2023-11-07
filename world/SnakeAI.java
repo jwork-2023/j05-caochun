@@ -3,9 +3,11 @@ package world;
 import java.util.ArrayList;
 import java.util.List;
 
-public class SnakeAI extends CreatureAI {
+import asciiPanel.AsciiPanel;
+import screen.GlyphDelegate;
 
-    /* Holds the snake pieces. Acts like a linked list */
+public class SnakeAI extends CreatureAI implements GlyphDelegate {
+
     ArrayList<SnakePiece> pieces;
 
     private List<String> messages;
@@ -14,6 +16,8 @@ public class SnakeAI extends CreatureAI {
         super(creature);
         this.messages = messages;
         this.pieces = new ArrayList<>();
+        
+        //the creature is virtually the first piece of the snake
         pieces.add(new SnakePiece(creature.x(), creature.y()));
     }
 
@@ -23,18 +27,26 @@ public class SnakeAI extends CreatureAI {
 
     @Override
     public void onEnter(int x, int y, Tile tile) {
-        
+
+        int xPrev = pieces.get(0).x();
+        int yPrev = pieces.get(0).y();
+
         if (tile.isGround()) {
+            pieces.get(0).setX(x);
+            pieces.get(0).setY(y);
+
             creature.setX(x);
             creature.setY(y);
         } else if (tile.isDiggable()) {
             creature.dig(x, y);
+        } else {
+            return;
         }
 
-        if(pieces.size() > 1) {
+        if (pieces.size() > 1) {
             for (int i = 1; i < pieces.size(); i++) {
-                int tempX = pieces.get(i).getX();
-                int tempY = pieces.get(i).getY();
+                int tempX = pieces.get(i).x();
+                int tempY = pieces.get(i).y();
                 pieces.get(i).setX(xPrev);
                 pieces.get(i).setY(yPrev);
                 xPrev = tempX;
@@ -43,22 +55,60 @@ public class SnakeAI extends CreatureAI {
         }
     }
 
-    int xPrev, yPrev;
+    @Override
+    public void attack(Creature another) {
+        another.modifyHP(-100);
+        this.grow();
+    }
+
+    public boolean grow() {
+        // Get last element in list
+        int x = pieces.get(pieces.size() - 1).x();
+        int y = pieces.get(pieces.size() - 1).y();
+
+        // Create new snake pieces and place them in a space that is not taken.
+        SnakePiece piece = new SnakePiece(x - 1, y);
+        if (!pieces.contains(piece)) {
+            pieces.add(piece);
+            return true;
+        }
+
+        SnakePiece piece2 = new SnakePiece(x + 1, y);
+        if (!pieces.contains(piece2)) {
+            pieces.add(piece);
+            return true;
+        }
+
+        SnakePiece piece3 = new SnakePiece(x, y - 1);
+        if (!pieces.contains(piece3)) {
+            pieces.add(piece);
+            return true;
+        }
+
+        SnakePiece piece4 = new SnakePiece(x, y + 1);
+        if (!pieces.contains(piece4)) {
+            pieces.add(piece);
+            return true;
+        }
+
+        return false;
+
+    }
 
     @Override
     public void onUpdate() {
-        xPrev= pieces.get(0).getX();
-        yPrev = pieces.get(0).getY();
+
     }
 
     @Override
     public void onNotify(String message) {
-        throw new UnsupportedOperationException("Unimplemented method 'onNotify'");
+        this.messages.add(message);
     }
 
     @Override
-    public void attack(Creature another) {
-        throw new UnsupportedOperationException("Unimplemented method 'attack'");
+    public void printGlyph(AsciiPanel terminal, int offsetX, int offsetY) {
+        for (SnakePiece p : this.getPieces()) {
+            terminal.write(creature.glyph(), p.x() - offsetX, p.y() - offsetY, creature.color());
+        }
     }
-
 }

@@ -48,4 +48,5 @@ public class BeanAI extends CreatureAI{
     public void attack(Creature another) {
         throw new UnsupportedOperationException("Unimplemented method 'attack'");
     }
+
 }

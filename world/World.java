@@ -11,8 +11,6 @@ public class World {
     private int height;
     private List<Creature> creatures;
 
-    public static final int TILE_TYPES = 2;
-
     public World(Tile[][] tiles) {
         this.tiles = tiles;
         this.width = tiles.length;
@@ -21,7 +19,7 @@ public class World {
     }
 
     public Tile tile(int x, int y) {
-        if (x < 0 || x >= width || y < 0 || y >= height) {
+        if (x <= 0 || x >= width || y <= 0 || y >= height) {
             return Tile.BOUNDS;
         } else {
             return tiles[x][y];

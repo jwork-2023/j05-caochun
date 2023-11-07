@@ -1,32 +1,9 @@
-/*
- * Copyright (C) 2015 Aeranythe Echosong
- *
- * This program is free software; you can redistribute it and/or
- * modify it under the terms of the GNU General Public License
- * as published by the Free Software Foundation; either version 2
- * of the License, or (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
- */
 package world;
 
 import java.awt.Color;
 
-/**
- *
- * @author Aeranythe Echosong
- */
 public class Creature {
 
-
-    /*Constant values for moving*/
     public static final int MOVE_UP = 1;
     public static final int MOVE_DOWN = 2;
     public static final int MOVE_LEFT = 3;
@@ -34,9 +11,10 @@ public class Creature {
 
     private World world;
 
-    private int x;
+    private int x, prevX;
 
     public void setX(int x) {
+        this.prevX = this.x;
         this.x = x;
     }
 
@@ -44,14 +22,23 @@ public class Creature {
         return x;
     }
 
-    private int y;
+    public int prevX() {
+        return prevX;
+    }
+
+    private int y, prevY;
 
     public void setY(int y) {
+        this.prevY = this.y;
         this.y = y;
     }
 
     public int y() {
         return y;
+    }
+
+    public int prevY() {
+        return prevY;
     }
 
     private char glyph;
@@ -70,6 +57,10 @@ public class Creature {
 
     public void setAI(CreatureAI ai) {
         this.ai = ai;
+    }
+
+    public CreatureAI getAI(){
+        return this.ai;
     }
 
     private int maxHP;
@@ -131,7 +122,6 @@ public class Creature {
             ai.attack(other);
         }
     }
-
 
     public void update() {
         this.ai.onUpdate();

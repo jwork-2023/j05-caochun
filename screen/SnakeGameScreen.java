@@ -8,31 +8,20 @@ import java.util.List;
 import asciiPanel.AsciiPanel;
 import world.Creature;
 import world.CreatureFactory;
-import world.Fruit;
 import world.World;
 import world.WorldBuilder;
 
-/**
- * Created by evanputnam on 6/25/17.
- */
 public class SnakeGameScreen implements Screen {
 
-    /* Width in charachters of the window */
-    private static final int WIDTH = 60;
+    private static final int WORLD_WIDTH = 100;
+    private static final int WORLD_HEIGHT = 100;
 
-    /* Height in charachters of the window */
-    private static final int HEIGHT = 30;
+    private static final int SCREEN_WIDTH = 80;
+    private static final int SCREEN_HEIGHT = 32;
 
-    /* Left key code */
     private static final int LEFT_KEY = 37;
-
-    /* Right key code */
     private static final int RIGHT_KEY = 39;
-
-    /* Up key code */
     private static final int UP_KEY = 38;
-
-    /* Down key code */
     private static final int DOWN_KEY = 40;
 
     /* Delay time for the timer to update screen */
@@ -43,9 +32,6 @@ public class SnakeGameScreen implements Screen {
 
     /* Snake data structure with an array list of other smaller snake pieces */
     private Creature snake;
-
-    /* Fruit object for the snake to eat */
-    private Fruit fruit;
 
     private List<String> messages;
     private List<String> oldMessages;
@@ -66,13 +52,13 @@ public class SnakeGameScreen implements Screen {
     private void createCreatures(CreatureFactory creatureFactory) {
         this.snake = creatureFactory.newSnake(this.messages);
 
-        for (int i = 0; i < 8; i++) {
+        for (int i = 0; i < 80; i++) {
             creatureFactory.newBean();
         }
     }
 
     private void createWorld() {
-        world = new WorldBuilder(WIDTH, HEIGHT).makeCaves().build();
+        world = new WorldBuilder(WORLD_WIDTH, WORLD_HEIGHT).makeCaves().build();
     }
 
     @Override
@@ -80,18 +66,18 @@ public class SnakeGameScreen implements Screen {
         // Terrain and creatures
         displayTiles(terminal, getScrollX(), getScrollY());
         // Player
-        terminal.write(snake.glyph(), snake.x() - getScrollX(), snake.y() - getScrollY(), snake.color());
+        ((GlyphDelegate) snake.getAI()).printGlyph(terminal, getScrollX(), getScrollY());
         // Stats
-        String stats = String.format("%3d/%3d hp", snake.hp(), snake.maxHP());
-        terminal.write(stats, 1, 23);
+        // String stats = String.format("%3d/%3d hp", snake.hp(), snake.maxHP());
+        // terminal.write(stats, 1, 23);
         // Messages
-        displayMessages(terminal, this.messages);
+        // displayMessages(terminal, this.messages);
     }
 
     private void displayTiles(AsciiPanel terminal, int left, int top) {
         // Show terrain
-        for (int x = 0; x < WIDTH; x++) {
-            for (int y = 0; y < HEIGHT; y++) {
+        for (int x = 0; x < SCREEN_WIDTH; x++) {
+            for (int y = 0; y < SCREEN_HEIGHT; y++) {
                 int wx = x + left;
                 int wy = y + top;
 
@@ -104,10 +90,14 @@ public class SnakeGameScreen implements Screen {
         }
         // Show creatures
         for (Creature creature : world.getCreatures()) {
-            if (creature.x() >= left && creature.x() < left + WIDTH && creature.y() >= top
-                    && creature.y() < top + HEIGHT) {
+            if (creature.x() >= left && creature.x() < left + SCREEN_WIDTH && creature.y() >= top
+                    && creature.y() < top + SCREEN_HEIGHT) {
                 if (snake.canSee(creature.x(), creature.y())) {
-                    terminal.write(creature.glyph(), creature.x() - left, creature.y() - top, creature.color());
+                    if (creature.getAI() instanceof GlyphDelegate) {
+                        ((GlyphDelegate) creature.getAI()).printGlyph(terminal, left, top);
+                    } else {
+                        terminal.write(creature.glyph(), creature.x() - left, creature.y() - top, creature.color());
+                    }
                 }
             }
         }
@@ -116,7 +106,7 @@ public class SnakeGameScreen implements Screen {
     }
 
     private void displayMessages(AsciiPanel terminal, List<String> messages) {
-        int top = HEIGHT - messages.size();
+        int top = SCREEN_HEIGHT - messages.size();
         for (int i = 0; i < messages.size(); i++) {
             terminal.write(messages.get(i), 1, top + i + 1);
         }
@@ -125,11 +115,11 @@ public class SnakeGameScreen implements Screen {
     }
 
     public int getScrollX() {
-        return Math.max(0, Math.min(snake.x() - WIDTH / 2, world.width() - WIDTH));
+        return Math.max(0, Math.min(snake.x() - SCREEN_WIDTH / 2, world.width() - SCREEN_WIDTH));
     }
 
     public int getScrollY() {
-        return Math.max(0, Math.min(snake.y() - HEIGHT / 2, world.height() - HEIGHT));
+        return Math.max(0, Math.min(snake.y() - SCREEN_HEIGHT / 2, world.height() - SCREEN_HEIGHT));
     }
 
     @Override
