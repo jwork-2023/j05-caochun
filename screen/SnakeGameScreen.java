@@ -24,13 +24,10 @@ public class SnakeGameScreen implements Screen {
     private static final int UP_KEY = 38;
     private static final int DOWN_KEY = 40;
 
-    /* Delay time for the timer to update screen */
     private static final int DELAY_TIME = 200;
 
-    /* Variable to represent the direction of the board at any given time */
     private int direction = 1;
 
-    /* Snake data structure with an array list of other smaller snake pieces */
     private Creature snake;
 
     private List<String> messages;
